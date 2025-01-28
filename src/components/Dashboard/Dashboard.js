@@ -1,4 +1,3 @@
-// src/components/Dashboard/Dashboard.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import NewLinkModal from "../NewLinkModal/NewLinkModal";
@@ -24,7 +23,7 @@ function Dashboard() {
     const fetchUserDetails = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/auth/me", { // Adjust the endpoint if necessary
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/me`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,7 +46,7 @@ function Dashboard() {
     const fetchDashboardStats = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/links/dashboard/stats", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/links/dashboard/stats`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -102,7 +101,7 @@ function Dashboard() {
   const fetchDashboardStats = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/links/dashboard/stats", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/links/dashboard/stats`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
