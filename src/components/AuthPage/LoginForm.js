@@ -18,7 +18,7 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       // 1. Send login request to backend
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -34,16 +34,10 @@ const LoginForm = () => {
         return;
       }
 
-      // 3. Parse the JSON response: typically, you'll get { token, user }
+      // 3. Parse the JSON response
       const data = await res.json();
-      // data might look like: 
-      // {
-      //   success: true,
-      //   token: "JWT_TOKEN_STRING",
-      //   user: { name: "Sujith", email: "...", ... }
-      // }
 
-      // 4. Store token and user details in localStorage (or sessionStorage)
+      // 4. Store token and user details in localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
