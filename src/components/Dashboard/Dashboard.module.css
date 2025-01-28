@@ -1,0 +1,171 @@
+.dashboardContainer {
+    display: flex;
+    min-height: 100vh;
+    font-family: sans-serif;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 200px;
+    background-color: #ffffff;
+    border-right: 1px solid #e1e1e1;
+    padding: 1rem;
+  }
+  
+  .logo {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-transform: capitalize;
+  }
+  
+  .navLinks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navLinks li {
+    padding: 0.7rem 0;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .activeLink {
+    font-weight: bold;
+    color: #1e1e1e;
+  }
+  
+  /* Main Content */
+  .mainContent {
+    flex: 1;
+    padding: 1rem;
+    background-color: #f7f8fa;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Top Bar */
+  .topBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .greetingContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .date {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .createBtn {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .searchInput {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .userAvatar {
+    background-color: #ffc107;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+  }
+  
+  /* Stats Section */
+  .statsSection {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    flex: 1;
+  }
+  
+  .totalClicksTitle {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .totalClicksNumber {
+    margin-left: 0.5rem;
+    font-size: 1.4rem;
+    color: #007bff;
+  }
+  
+  /* Cards */
+  .cardsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .card {
+    background-color: #fff;
+    flex: 1;
+    min-width: 250px;
+    max-width: 450px;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 6px;
+  }
+  
+  .card h3 {
+    margin-bottom: 1rem;
+  }
+  
+  /* Bar Chart Items */
+  .barItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+  
+  .barLabel {
+    width: 80px;
+    font-size: 0.9rem;
+  }
+  
+  .barTrack {
+    background-color: #e6e6e6;
+    height: 6px;
+    flex: 1;
+    margin: 0 0.5rem;
+    border-radius: 3px;
+  }
+  
+  .barFill {
+    background-color: #007bff;
+    height: 100%;
+    border-radius: 3px;
+  }
+  
+  .barValue {
+    font-size: 0.85rem;
+    width: 40px;
+    text-align: right;
+  }
+  

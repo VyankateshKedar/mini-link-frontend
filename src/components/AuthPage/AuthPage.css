@@ -1,0 +1,202 @@
+/* General Layout */
+.auth-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .content {
+    display: flex;
+    flex: 1;
+  }
+  
+  /* Image Side */
+  .image-side {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .logo {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+  
+  /* Form Side */
+  .form-side {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+  }
+  
+  /* Navbar */
+  .navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 30px;
+    background: transparent;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+  }
+  
+  .nav-links button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 4px;
+  }
+  
+  .nav-links .active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .nav-links button:hover {
+    background-color: #e0eafc;
+  }
+  
+  /* Form */
+  .form {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin-bottom:200px;
+  }
+  
+  .form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .form input {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .form button {
+    margin-top: 20px;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .form p {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .form a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  /* --- Responsive Design --- */
+  
+  /* For tablets */
+  @media (max-width: 768px) {
+    .content {
+      flex-direction: column;
+    }
+  
+    .image-side {
+      height: 40vh;
+      flex: none;
+    }
+  
+    .background-image {
+      object-fit: cover;
+    }
+  
+    .form-side {
+      height: 60vh;
+    }
+  
+    .form {
+      width: 90%;
+      max-width: 350px;
+    }
+  
+    .navbar {
+      padding: 10px 20px;
+    }
+  
+    .nav-links button {
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+  }
+  
+  /* For mobile */
+  @media (max-width: 480px) {
+    .navbar {
+      padding: 10px;
+    }
+  
+    .nav-links button {
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+  
+    .logo {
+      font-size: 20px;
+      top: 10px;
+      left: 15px;
+    }
+  
+    .form {
+      width: 95%;
+      max-width: 300px;
+      padding: 20px;
+    }
+  
+    .form h2 {
+      font-size: 20px;
+    }
+  
+    .form input {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .form button {
+      font-size: 14px;
+      padding: 8px;
+    }
+  }
+  

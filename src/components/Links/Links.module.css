@@ -1,0 +1,275 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background-color: #f7f8fa;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background-color: #ffffff;
+  border-right: 1px solid #e1e1e1;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 2rem;
+  text-transform: capitalize;
+}
+
+.navLinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navLinks li {
+  padding: 1rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.navLinks li:hover {
+  color: #007bff;
+}
+
+.activeLink {
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* Main Content */
+.mainContent {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #f7f8fa;
+}
+
+/* Top Bar */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.greetingContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.greetingContainer h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.date {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.createBtn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.createBtn:hover {
+  background-color: #0056b3;
+}
+
+.searchInput {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  color: #333;
+  width: 250px;
+}
+
+.searchInput::placeholder {
+  color: #aaa;
+}
+
+.userAvatar {
+  background-color: #ffc107;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+  color: #000;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Content Wrapper */
+.contentWrapper {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Table Section */
+.tableSection {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.linksTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.linksTable thead {
+  background-color: #f4f6f9;
+  font-size: 0.95rem;
+  color: #333;
+  text-align: left;
+}
+
+.linksTable th, .linksTable td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.linksTable th {
+  font-weight: 600;
+}
+
+.linksTable tr:hover {
+  background-color: #f9fbfd;
+}
+
+.linksTable td {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.linksTable .copyBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.linksTable .copyBtn img {
+  width: 16px;
+  height: 16px;
+  transition: opacity 0.2s ease;
+}
+
+.linksTable .copyBtn:hover img {
+  opacity: 0.7;
+}
+
+.linksTable .actionBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.linksTable .actionBtn img {
+  width: 18px;
+  height: 18px;
+}
+
+.linksTable td .inactive {
+  color: #d9534f;
+}
+
+.linksTable td .active {
+  color: #28a745;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.pagination button {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+.pagination .activePage {
+  background: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0.9;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease, fadeOut 0.3s ease 3s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
