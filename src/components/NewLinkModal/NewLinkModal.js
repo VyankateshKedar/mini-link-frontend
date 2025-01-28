@@ -21,11 +21,11 @@ function NewLinkModal({
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/links", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/links`, {
         method: "POST",
         headers: {
           // IMPORTANT: If you use JWT-based auth, include an Authorization header
-          "Authorization": `Bearer ${localStorage.getItem("token")}`, 
+          "Authorization": `Bearer ${token}`, 
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
