@@ -1,4 +1,3 @@
-// src/components/Links/Links.jsx
 import React, { useState, useEffect } from "react";
 import NewLinkModal from "../NewLinkModal/NewLinkModal";
 import styles from "./Links.module.css";
@@ -24,7 +23,7 @@ function Links() {
     try {
       const token = localStorage.getItem("token") || "";
       const limit = 10;
-      let url = `http://localhost:5000/api/links?page=${currentPage}&limit=${limit}`;
+      let url = `${process.env.REACT_APP_API_URL}/links?page=${currentPage}&limit=${limit}`;
       if (searchTerm) {
         url += `&search=${encodeURIComponent(searchTerm)}`;
       }
