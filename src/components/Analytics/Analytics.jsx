@@ -1,4 +1,3 @@
-// src/components/Analytics/Analytics.jsx
 import React, { useState, useEffect } from "react";
 import styles from "./Analytics.module.css";
 import { FiCopy } from "react-icons/fi";
@@ -19,7 +18,7 @@ function Analytics() {
     try {
       const token = localStorage.getItem("token") || "";
       const limit = 20;
-      const url = `http://localhost:5000/api/links/analytics?page=${currentPage}&limit=${limit}`;
+      const url = `${process.env.REACT_APP_API_URL}/links/analytics?page=${currentPage}&limit=${limit}`;
 
       const response = await fetch(url, {
         method: "GET",
