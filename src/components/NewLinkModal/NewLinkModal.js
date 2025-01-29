@@ -1,11 +1,10 @@
+// src/components/NewLinkModal/NewLinkModal.jsx
 import React, { useState } from "react";
-import styles from "./NewLinkModel.module.css";
+import styles from "./NewLinkModal.module.css";
+import { createLink } from "../../utils/api";
+import { toast } from "react-toastify";
 
-function NewLinkModal({ 
-  isOpen, 
-  onClose, 
-  onLinkCreated 
-}) {
+function NewLinkModal({ isOpen, onClose, onLinkCreated }) {
   const [destinationUrl, setDestinationUrl] = useState("");
   const [remarks, setRemarks] = useState("");
   const [isExpirationEnabled, setIsExpirationEnabled] = useState(false);
@@ -15,47 +14,31 @@ function NewLinkModal({
     e.preventDefault();
 
     if (!destinationUrl.trim() || !remarks.trim()) {
-      alert("Please fill in Destination URL and Remarks!");
+      toast.error("Please fill in Destination URL and Remarks!");
       return;
     }
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/links`, {
-        method: "POST",
-        headers: {
-          // IMPORTANT: If you use JWT-based auth, include an Authorization header
-          "Authorization": `Bearer ${token}`, 
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          destinationUrl,
-          remarks,
-          expiration: isExpirationEnabled ? expirationDate : null,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert(errorData.message || "Error creating link");
-        return;
+      const payload = {
+        destinationUrl,
+        remarks,
+        expiration: isExpirationEnabled ? expirationDate : null,
+      };
+      const response = await createLink(payload);
+      if (response.success) {
+        onLinkCreated(response.link);
+        toast.success("Link created successfully!");
+        // Reset fields
+        setDestinationUrl("");
+        setRemarks("");
+        setIsExpirationEnabled(false);
+        setExpirationDate("");
+      } else {
+        toast.error(response.message || "Error creating link");
       }
-
-      const result = await response.json();
-      // result might look like: { success: true, data: { shortUrl: "http://...", etc. } }
-
-      // Notify parent to refresh the dashboard or analytics
-      onLinkCreated(result.data);
-
-      // Close modal & reset fields
-      onClose();
-      setDestinationUrl("");
-      setRemarks("");
-      setIsExpirationEnabled(false);
-      setExpirationDate("");
     } catch (error) {
       console.error(error);
-      alert("An error occurred while creating the link.");
+      toast.error("An error occurred while creating the link.");
     }
   };
 
@@ -90,6 +73,7 @@ function NewLinkModal({
             placeholder="https://web.whatsapp.com/"
             value={destinationUrl}
             onChange={(e) => setDestinationUrl(e.target.value)}
+            required
           />
 
           <label className={styles.fieldLabel}>
@@ -100,6 +84,7 @@ function NewLinkModal({
             placeholder="Add remarks"
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
+            required
           />
 
           <div className={styles.expirationRow}>
@@ -127,9 +112,9 @@ function NewLinkModal({
 
           {/* Footer (buttons) */}
           <div className={styles.modalFooter}>
-            <button 
-              type="button" 
-              className={styles.clearBtn} 
+            <button
+              type="button"
+              className={styles.clearBtn}
               onClick={handleClear}
             >
               Clear
