@@ -1,0 +1,90 @@
+/* src/components/EditLinkModal/EditLinkModal.module.css */
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modalContainer {
+    background-color: #fff;
+    padding: 20px;
+    width: 500px;
+    max-width: 90%;
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .closeBtn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .modalBody {
+    margin-top: 15px;
+  }
+  
+  .fieldLabel {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .textInput,
+  .textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+  
+  .textarea {
+    resize: vertical;
+    height: 80px;
+  }
+  
+  .required {
+    color: red;
+  }
+  
+  .modalFooter {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .clearBtn,
+  .updateBtn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .clearBtn {
+    background-color: #ccc;
+  }
+  
+  .updateBtn {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .updateBtn:hover {
+    background-color: #218838;
+  }
+  
