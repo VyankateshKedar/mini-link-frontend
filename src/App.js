@@ -4,8 +4,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import AuthPage from "./components/AuthPage/AuthPage";
 import Dashboard from "./components/Dashboard/Dashboard";
 import LinksPage from "./components/Links/Links";
-import AnalyticsPage from "./components/Analytics/Analytics"; // Ensure you have this component
+import AnalyticsPage from "./components/Analytics/Analytics";
+import SettingsPage from "./components/SettingsPage/SettingsPage";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   // Function to check if the user is authenticated
@@ -13,8 +16,9 @@ const App = () => {
 
   return (
     <Router>
+      <ToastContainer />
       <Routes>
-        {/* Root Path - AuthPage (Login) */}
+        {/* Root Path - AuthPage (Login/Signup) */}
         <Route
           path="/"
           element={
@@ -48,6 +52,16 @@ const App = () => {
           element={
             <ProtectedRoute>
               <AnalyticsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Settings Page - Protected Route */}
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
             </ProtectedRoute>
           }
         />
