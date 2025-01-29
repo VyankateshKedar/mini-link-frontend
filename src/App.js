@@ -1,11 +1,12 @@
 // src/App.jsx
+
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "./components/AuthPage/AuthPage";
 import Dashboard from "./components/Dashboard/Dashboard";
 import LinksPage from "./components/Links/Links";
-import AnalyticsPage from "./components/Analytics/AnalyticsPage";
-import SettingsPage from "./components/SettingsPage/SettingsPage";
+import Analytics from "./components/Analytics/Analytics"; // Updated import
+import SettingsPage from "./components/SettingsPage/SettingsPage"; // Ensure you have this component
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -51,7 +52,7 @@ const App = () => {
           path="/analytics"
           element={
             <ProtectedRoute>
-              <AnalyticsPage />
+              <Analytics />
             </ProtectedRoute>
           }
         />
