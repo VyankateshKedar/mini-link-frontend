@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import AuthPage from "./components/AuthPage/AuthPage";
 import Dashboard from "./components/Dashboard/Dashboard";
 import LinksPage from "./components/Links/Links";
-import AnalyticsPage from "./components/Analytics/Analytics";
+import AnalyticsPage from "./components/Analytics/AnalyticsPage";
 import SettingsPage from "./components/SettingsPage/SettingsPage";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
