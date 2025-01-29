@@ -1,77 +1,98 @@
+// src/components/Links/Links.jsx
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import NewLinkModal from "../NewLinkModal/NewLinkModal";
+import EditLinkModal from "../EditLinkModal/EditLinkModal";
 import styles from "./Links.module.css";
-
-// Import icons
 import { FiCopy, FiEdit2, FiTrash2 } from "react-icons/fi";
+import { deleteLink as deleteLinkAPI, fetchLinks, fetchDashboardStats } from "../../utils/api";
+import { toast } from "react-toastify";
 
 function Links() {
   const [links, setLinks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [copyMsg, setCopyMsg] = useState("");
-  const [createdMsg, setCreatedMsg] = useState("");
+  const [selectedLink, setSelectedLink] = useState(null);
 
   useEffect(() => {
-    fetchLinks();
-    setCopyMsg("");
+    fetchLinkData();
   }, [currentPage, searchTerm]);
 
-  const fetchLinks = async () => {
+  const fetchLinkData = async () => {
     try {
-      const token = localStorage.getItem("token") || "";
-      const limit = 10;
-      let url = `${process.env.REACT_APP_API_URL}/links?page=${currentPage}&limit=${limit}`;
-      if (searchTerm) {
-        url += `&search=${encodeURIComponent(searchTerm)}`;
+      const data = await fetchLinks(currentPage, 10, searchTerm);
+      if (data.success) {
+        setLinks(data.links);
+        setTotalPages(data.totalPages || 1);
+      } else {
+        toast.error(data.message || "Failed to fetch links");
       }
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert(errorData.message || "Failed to fetch links");
-        return;
-      }
-
-      const data = await response.json();
-      setLinks(data.links);
-      setTotalPages(data.totalPages || 1);
     } catch (error) {
       console.error("Error fetching links:", error);
+      toast.error("An error occurred while fetching links.");
     }
   };
 
   const handleCreateNew = () => {
-    setIsModalOpen(true);
+    setIsNewModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseNewModal = () => {
+    setIsNewModalOpen(false);
   };
 
-  const handleLinkCreated = (newLink) => {
-    fetchLinks();
-    setCreatedMsg("Link created successfully!");
-    setTimeout(() => setCreatedMsg(""), 1500);
-    handleCloseModal();
+  const handleLinkCreated = () => {
+    fetchLinkData();
+    toast.success("Link created successfully!");
+    handleCloseNewModal();
   };
 
   const handleCopyLink = (shortUrl) => {
     navigator.clipboard
       .writeText(shortUrl)
       .then(() => {
-        setCopyMsg("Link Copied");
-        setTimeout(() => setCopyMsg(""), 1500);
+        toast.success("Link copied to clipboard!");
       })
-      .catch(() => alert("Failed to copy link"));
+      .catch(() => toast.error("Failed to copy link."));
+  };
+
+  const handleEditLink = (link) => {
+    setSelectedLink(link);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedLink(null);
+  };
+
+  const handleLinkUpdated = () => {
+    fetchLinkData();
+    toast.success("Link updated successfully!");
+    handleCloseEditModal();
+  };
+
+  const handleDeleteLink = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this link?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const response = await deleteLinkAPI(id);
+      if (response.success) {
+        toast.success("Link deleted successfully!");
+        fetchLinkData();
+      } else {
+        toast.error(response.message || "Failed to delete link.");
+      }
+    } catch (error) {
+      console.error("Error deleting link:", error);
+      toast.error("An error occurred while deleting the link.");
+    }
   };
 
   const goToPage = (pageNumber) => {
@@ -97,10 +118,18 @@ function Links() {
       <aside className={styles.sidebar}>
         <div className={styles.logo}>cuvette</div>
         <ul className={styles.navLinks}>
-          <li>Dashboard</li>
-          <li className={styles.activeLink}>Links</li>
-          <li>Analytics</li>
-          <li>Settings</li>
+          <li>
+            <Link to="/dashboard">Dashboard</Link>
+          </li>
+          <li className={styles.activeLink}>
+            <Link to="/links">Links</Link>
+          </li>
+          <li>
+            <Link to="/analytics">Analytics</Link>
+          </li>
+          <li>
+            <Link to="/settings">Settings</Link>
+          </li>
         </ul>
       </aside>
 
@@ -109,8 +138,15 @@ function Links() {
         <div className={styles.contentWrapper}>
           <header className={styles.topBar}>
             <div className={styles.greetingContainer}>
-              <h2>Good morning, Sujith</h2>
-              <span className={styles.date}>Tue, Jan 25</span>
+              <h2>Good morning, {JSON.parse(localStorage.getItem("user")).name}</h2>
+              <span className={styles.date}>
+                {new Date().toLocaleDateString("en-US", {
+                  weekday: "short",
+                  month: "short",
+                  day: "2-digit",
+                  year: "numeric",
+                })}
+              </span>
             </div>
 
             <div className={styles.actions}>
@@ -127,7 +163,13 @@ function Links() {
                   setSearchTerm(e.target.value);
                 }}
               />
-              <div className={styles.userAvatar}>SU</div>
+              <div className={styles.userAvatar}>
+                {JSON.parse(localStorage.getItem("user")).name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .toUpperCase()}
+              </div>
             </div>
           </header>
         </div>
@@ -185,17 +227,21 @@ function Links() {
                       </button>
                     </td>
                     <td>{link.remarks || "-"}</td>
-                    <td>{link.clicks?.length || 0}</td> {/* Updated Line */}
-                    <td
-                      style={{ color: isExpired ? "orange" : "green" }}
-                    >
+                    <td>{link.clicks?.length || 0}</td>
+                    <td style={{ color: isExpired ? "orange" : "green" }}>
                       {isExpired ? "Inactive" : "Active"}
                     </td>
                     <td>
-                      <button className={styles.actionBtn}>
+                      <button
+                        className={styles.actionBtn}
+                        onClick={() => handleEditLink(link)}
+                      >
                         <FiEdit2 size={16} />
                       </button>
-                      <button className={styles.actionBtn}>
+                      <button
+                        className={styles.actionBtn}
+                        onClick={() => handleDeleteLink(link._id)}
+                      >
                         <FiTrash2 size={16} />
                       </button>
                     </td>
@@ -238,15 +284,21 @@ function Links() {
           </div>
         )}
 
-        {/* Toast Messages */}
-        {copyMsg && <div className={styles.toast}>{copyMsg}</div>}
-        {createdMsg && <div className={styles.toast}>{createdMsg}</div>}
+        {/* Toast Messages are handled globally by react-toastify */}
 
         {/* New Link Modal */}
         <NewLinkModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
+          isOpen={isNewModalOpen}
+          onClose={handleCloseNewModal}
           onLinkCreated={handleLinkCreated}
+        />
+
+        {/* Edit Link Modal */}
+        <EditLinkModal
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          link={selectedLink}
+          onLinkUpdated={handleLinkUpdated}
         />
       </main>
     </div>
