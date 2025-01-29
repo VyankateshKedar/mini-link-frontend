@@ -1,6 +1,8 @@
+// src/components/AuthPage/LoginForm.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Form.css";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +32,7 @@ const LoginForm = () => {
       // 2. If the server returns an error status (e.g., 401, 400), handle it
       if (!res.ok) {
         const { message } = await res.json();
-        alert(message || "Invalid credentials!");
+        toast.error(message || "Invalid credentials!");
         return;
       }
 
@@ -42,10 +44,11 @@ const LoginForm = () => {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       // 5. Redirect to dashboard
+      toast.success("Logged in successfully!");
       navigate("/dashboard");
     } catch (err) {
       console.error("Login Error:", err);
-      alert("Something went wrong. Please try again later.");
+      toast.error("Something went wrong. Please try again later.");
     }
   };
 
@@ -74,7 +77,7 @@ const LoginForm = () => {
       <button type="submit">Login</button>
 
       <p>
-        Don't have an account? <span>SignUp</span>
+        Don't have an account? <span onClick={() => navigate("/signup")}>SignUp</span>
       </p>
     </form>
   );
