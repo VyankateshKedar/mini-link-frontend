@@ -1,3 +1,4 @@
+// src/components/AuthPage/AuthPage.jsx
 import React, { useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import SignUpForm from "./SignUpForm";
