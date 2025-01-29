@@ -1,34 +1,20 @@
+// src/components/AuthPage/SignUpForm.jsx
 import React, { useState } from "react";
 import "./Form.css";
 import { registerUser } from "../../utils/api";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    mobile: "",
     password: "",
     confirmPassword: "",
   });
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    const response = await registerUser(formData);
-    if (response.success) {
-      alert("User registered successfully!");
-    } else {
-      alert(response.message || "Error registering user");
-    }
-  };
+  // ... rest of the code
 
   return (
     <form className="form" onSubmit={handleSubmit}>
@@ -50,14 +36,6 @@ const SignUpForm = () => {
         required
       />
       <input
-        type="tel"
-        name="mobile"
-        placeholder="Mobile no."
-        value={formData.mobile}
-        onChange={handleChange}
-        required
-      />
-      <input
         type="password"
         name="password"
         placeholder="Password"
@@ -75,7 +53,7 @@ const SignUpForm = () => {
       />
       <button type="submit">Register</button>
       <p>
-        Already have an account? <a href="#">Login</a>
+        Already have an account? <span onClick={() => navigate("/")}>Login</span>
       </p>
     </form>
   );
