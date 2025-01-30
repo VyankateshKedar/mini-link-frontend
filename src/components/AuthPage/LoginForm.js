@@ -39,9 +39,12 @@ const LoginForm = () => {
       // 3. Parse the JSON response
       const data = await res.json();
 
-      // 4. Store token and user details in localStorage
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+     // 2. Store the token in sessionStorage instead of localStorage
+      sessionStorage.setItem("token", data.token);
+
+      // 3. Optionally store user details in sessionStorage as well
+      sessionStorage.setItem("user", JSON.stringify(data.user));
+
 
       // 5. Redirect to dashboard
       toast.success("Logged in successfully!");
