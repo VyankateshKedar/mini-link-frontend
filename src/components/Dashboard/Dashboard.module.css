@@ -1,171 +1,332 @@
+/* Global Reset & Font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f7f8fa; /* Matches the main content background */
+}
+
+/* Dashboard Container */
 .dashboardContainer {
-    display: flex;
-    min-height: 100vh;
-    font-family: sans-serif;
-  }
-  
-  /* Sidebar */
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background-color: #ffffff;
+  border-right: 1px solid #e1e1e1;
+  padding: 2rem 1rem; /* More spacious vertical padding */
+  flex-shrink: 0;
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  color: #000;
+}
+
+.navLinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navLinks li {
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.3rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navLinks li:hover {
+  background-color: #f0f0f0;
+}
+
+.activeLink {
+  font-weight: 600;
+  background-color: #eaf2ff;
+  color: #007bff;
+}
+
+/* Main Content */
+.mainContent {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Bar */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+/* Greeting Container */
+.greetingContainer h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+
+.date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Actions (Create + Search + Avatar) */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.createBtn {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.createBtn:hover {
+  background-color: #0056b3;
+}
+
+.searchInput {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 200px;
+}
+
+/* User Avatar */
+.userAvatar {
+  background-color: #ffc107;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Stats Section */
+.statsSection {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  flex: 1;
+}
+
+/* Total Clicks Title */
+.totalClicksTitle {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.totalClicksNumber {
+  margin-left: 0.4rem;
+  font-size: 1.6rem;
+  color: #007bff;
+  font-weight: 600;
+}
+
+/* Cards Wrapper */
+.cardsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Individual Card */
+.card {
+  background-color: #fff;
+  flex: 1;
+  min-width: 260px;
+  max-width: 480px; 
+  padding: 1.5rem;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+
+.card h3 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Bar Chart Items */
+.barItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.barLabel {
+  width: 70px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.barTrack {
+  background-color: #e6e6e6;
+  height: 6px;
+  flex: 1;
+  margin: 0 0.5rem;
+  border-radius: 3px;
+}
+
+.barFill {
+  background-color: #007bff;
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.barValue {
+  font-size: 0.85rem;
+  width: 40px;
+  text-align: right;
+  color: #333;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 992px) {
   .sidebar {
     width: 200px;
-    background-color: #ffffff;
-    border-right: 1px solid #e1e1e1;
-    padding: 1rem;
+    padding: 1.5rem 1rem;
   }
-  
-  .logo {
-    font-size: 1.4rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    text-transform: capitalize;
-  }
-  
-  .navLinks {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .navLinks li {
-    padding: 0.7rem 0;
-    cursor: pointer;
-    color: #333;
-  }
-  
-  .activeLink {
-    font-weight: bold;
-    color: #1e1e1e;
-  }
-  
-  /* Main Content */
+
   .mainContent {
-    flex: 1;
-    padding: 1rem;
-    background-color: #f7f8fa;
-    display: flex;
-    flex-direction: column;
+    padding: 1.5rem;
   }
-  
-  /* Top Bar */
+
   .topBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
-  
-  .greetingContainer {
-    display: flex;
+
+  .createBtn {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .searchInput {
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboardContainer {
     flex-direction: column;
   }
-  
-  .date {
-    color: #666;
-    font-size: 0.9rem;
-  }
-  
-  .actions {
+
+  /* Sidebar collapses or remains at top? 
+     If you want it collapsible, hide or reposition it. 
+     Below, we keep it visible but narrower. */
+  .sidebar {
+    width: 100%;
     display: flex;
     align-items: center;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e1e1e1;
+  }
+
+  /* Logo and nav arranged in a row for smaller screens */
+  .logo {
+    margin-bottom: 0;
+    margin-right: auto;
+  }
+
+  .navLinks {
+    display: flex;
+    gap: 1rem;
+    margin-left: auto;
+  }
+
+  .navLinks li {
+    margin-bottom: 0;
+  }
+
+  .mainContent {
+    padding: 1rem;
+  }
+
+  .topBar {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 1rem;
   }
-  
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .statsSection {
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+
+  .cardsWrapper {
+    gap: 1rem;
+    flex-direction: column;
+  }
+
+  .card {
+    max-width: 100%;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
   .createBtn {
-    background-color: #007bff;
-    border: none;
-    color: #fff;
-    padding: 0.6rem 1rem;
-    cursor: pointer;
-    border-radius: 5px;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
   }
-  
+
   .searchInput {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+    min-width: 120px;
   }
-  
+
   .userAvatar {
-    background-color: #ffc107;
     width: 35px;
     height: 35px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    font-weight: bold;
-    color: #000;
-    cursor: pointer;
+    font-size: 0.8rem;
   }
-  
-  /* Stats Section */
-  .statsSection {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 1rem;
-    flex: 1;
-  }
-  
-  .totalClicksTitle {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-  }
-  
+
   .totalClicksNumber {
-    margin-left: 0.5rem;
     font-size: 1.4rem;
-    color: #007bff;
   }
-  
-  /* Cards */
-  .cardsWrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  
-  .card {
-    background-color: #fff;
-    flex: 1;
-    min-width: 250px;
-    max-width: 450px;
-    padding: 1rem;
-    border: 1px solid #eee;
-    border-radius: 6px;
-  }
-  
+
   .card h3 {
-    margin-bottom: 1rem;
+    font-size: 0.95rem;
   }
-  
-  /* Bar Chart Items */
-  .barItem {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.8rem;
-  }
-  
-  .barLabel {
-    width: 80px;
-    font-size: 0.9rem;
-  }
-  
-  .barTrack {
-    background-color: #e6e6e6;
-    height: 6px;
-    flex: 1;
-    margin: 0 0.5rem;
-    border-radius: 3px;
-  }
-  
-  .barFill {
-    background-color: #007bff;
-    height: 100%;
-    border-radius: 3px;
-  }
-  
+
+  .barLabel,
   .barValue {
-    font-size: 0.85rem;
-    width: 40px;
-    text-align: right;
+    font-size: 0.75rem;
   }
-  
+}
