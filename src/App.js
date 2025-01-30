@@ -13,8 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   // Function to check if the user is authenticated
-  const isAuthenticated = () => !!localStorage.getItem("token"); // Adjust based on your auth logic
-
+ const isAuthenticated = () => !!sessionStorage.getItem("token");
+  
   return (
     <Router>
       <ToastContainer />
