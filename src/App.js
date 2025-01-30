@@ -21,7 +21,7 @@ const App = () => {
       <Routes>
         {/* Root Path - AuthPage (Login/Signup) */}
         <Route
-          path="/"
+          path="/login"
           element={
             isAuthenticated() ? <Navigate to="/dashboard" replace /> : <AuthPage />
           }
