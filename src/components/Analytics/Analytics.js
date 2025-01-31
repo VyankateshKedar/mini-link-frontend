@@ -252,7 +252,7 @@ const Analytics = () => {
         />
       )}
     </div>
-  );
+  ); // Closing parenthesis for return statement
+}; // ✅ Added closing brace to end the Analytics function
 
-export default Analytics;
-}
+export default Analytics; // ✅ Now correctly placed at the top level
