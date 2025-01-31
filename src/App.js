@@ -8,8 +8,8 @@ import LinksPage from "./components/Links/Links";
 import Analytics from "./components/Analytics/Analytics"; 
 import SettingsPage from "./components/SettingsPage/SettingsPage"; 
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-// import { ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   // Function to check if the user is authenticated
