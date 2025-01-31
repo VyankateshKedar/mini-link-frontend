@@ -1,6 +1,6 @@
 // src/components/NewLinkModal/NewLinkModal.jsx
 import React, { useState } from "react";
-import styles from "./NewLinkModal.module.css";
+import styles from "./NewLinkModel.module.css";
 import { createLink } from "../../utils/api";
 import { toast } from "react-toastify";
 
