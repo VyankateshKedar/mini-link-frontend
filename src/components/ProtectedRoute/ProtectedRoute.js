@@ -10,7 +10,7 @@ import { Navigate } from "react-router-dom";
  */
 const ProtectedRoute = ({ children }) => {
   // Check if the user is authenticated
-  const isAuthenticated = !!localStorage.getItem("token"); // Adjust based on your auth logic
+   const isAuthenticated = !!sessionStorage.getItem("token"); // Adjust based on your auth logic
 
   if (!isAuthenticated) {
     // If not authenticated, redirect to AuthPage (login)
