@@ -42,15 +42,12 @@ const LoginForm = () => {
       // 3. Parse the JSON response
       const data = await res.json();
 
-      // 4. Store the token in sessionStorage
+      // After successful login in LoginForm.jsx
       sessionStorage.setItem("token", data.token);
-
-      // 5. Optionally store user details in sessionStorage
       sessionStorage.setItem("user", JSON.stringify(data.user));
-
-      // 6. Redirect to dashboard
       toast.success("Logged in successfully!");
       navigate("/dashboard");
+
     } catch (err) {
       console.error("Login Error:", err);
       toast.error("Something went wrong. Please try again later.");
