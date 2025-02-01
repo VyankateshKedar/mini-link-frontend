@@ -1,12 +1,22 @@
 // src/components/AuthPage/AuthPage.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import SignUpForm from "./SignUpForm";
 import LoginForm from "./LoginForm";
 import "./AuthPage.css";
 
 const AuthPage = () => {
-  const [page, setPage] = useState("signup"); // Default is "signup"
+  const location = useLocation();
+
+  // Set the initial page based on the URL: if the pathname is "/login" use "login", otherwise default to "signup"
+  const getInitialPage = () => (location.pathname === "/login" ? "login" : "signup");
+  const [page, setPage] = useState(getInitialPage);
+
+  // Update the page state if the location changes.
+  useEffect(() => {
+    setPage(getInitialPage());
+  }, [location.pathname]);
 
   return (
     <div className="auth-page">
