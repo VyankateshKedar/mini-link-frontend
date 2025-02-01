@@ -1,26 +1,29 @@
-.container {
+.container {  
   display: flex;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   background-color: #f7f8fa;
 }
 
-/* Sidebar */
+/* Sidebar container */
 .sidebar {
   width: 240px;
   background-color: #ffffff;
   border-right: 1px solid #e1e1e1;
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
+  padding: 2rem 1rem;
+  flex-shrink: 0;
 }
 
+/* Remove text styling from .logo since we're using an image now */
 .logo {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #007bff;
-  margin-bottom: 2rem;
-  text-transform: capitalize;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+/* Style your logo image if needed */
+.logoImage {
+  max-width: 100%;
+  height: auto;
 }
 
 .navLinks {
@@ -30,38 +33,53 @@
 }
 
 .navLinks li {
-  padding: 1rem 0;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #666;
+  margin-bottom: 0.3rem;
+  border-radius: 6px;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.navLinks li:hover {
+.navLinks li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0.8rem 1rem;
+  color: #333;
+  border-radius: 6px;
+}
+
+.navLinks li a:hover {
+  background-color: #f0f0f0;
+  text-decoration: none;
+  color: #333;
+}
+
+.activeLink a {
+  font-weight: 600;
+  background-color: #eaf2ff;
   color: #007bff;
 }
 
-.activeLink {
-  font-weight: bold;
-  color: #007bff;
+.icon {
+  margin-right: 0.6rem;
+  font-size: 1.1rem; 
 }
-
-/* Main Content */
+/* MAIN CONTENT */
 .mainContent {
   flex: 1;
-  padding: 2rem;
   display: flex;
   flex-direction: column;
   background-color: #f7f8fa;
 }
 
-/* Top Bar */
+/* TOP BAR */
 .topBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  background-color: #ffffff;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1rem;
 }
 
 .greetingContainer {
@@ -70,12 +88,14 @@
 }
 
 .greetingContainer h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 0 0 0.3rem 0;
+  color: #111111;
+  font-weight: 600;
 }
 
 .date {
-  color: #888;
+  color: #888888;
   font-size: 0.9rem;
 }
 
@@ -86,183 +106,216 @@
 }
 
 .createBtn {
-  background-color: #007bff;
-  color: #fff;
-  padding: 0.7rem 1.5rem;
+  background-color: #4c48f3; /* "Create new" button color */
+  color: #ffffff;
+  padding: 0.65rem 1.25rem;
   border: none;
-  border-radius: 5px;
-  font-size: 0.95rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .createBtn:hover {
-  background-color: #0056b3;
+  background-color: #3a35c9; /* Darker purple on hover */
 }
 
 .searchInput {
-  padding: 0.6rem 1rem;
+  padding: 0.55rem 1rem;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 0.95rem;
-  color: #333;
-  width: 250px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 240px;
+  color: #333333;
 }
 
 .searchInput::placeholder {
   color: #aaa;
 }
 
+/* USER AVATAR */
 .userAvatar {
-  background-color: #ffc107;
+  background-color: #ffe58f;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   display: grid;
   place-items: center;
   font-weight: bold;
-  color: #000;
-  font-size: 1rem;
+  color: #111111;
+  font-size: 0.9rem;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Content Wrapper */
+/* CONTENT WRAPPER */
 .contentWrapper {
-  max-width: 1200px;
+  flex: 1;
   width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 1rem 2rem;
 }
 
-/* Table Section */
+/* TABLE SECTION */
 .tableSection {
-  background-color: #fff;
+  background-color: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  overflow: hidden;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 20rem;
+  /* Allow horizontal scrolling instead of hiding overflow */
+  overflow-x: auto;
 }
 
+/* Make sure we can manually control columns */
 .linksTable {
   width: 100%;
   border-collapse: collapse;
+  /* Enables text-overflow ellipsis on fixed columns */
+  table-layout: fixed;
+  border-radius: 8px;
 }
 
 .linksTable thead {
   background-color: #f4f6f9;
-  font-size: 0.95rem;
-  color: #333;
+  font-size: 0.9rem;
+  color: #333333;
   text-align: left;
 }
 
-.linksTable th, .linksTable td {
-  padding: 0.8rem 1rem;
+.linksTable th,
+.linksTable td {
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid #eee;
+}
+
+/* Set a narrower, fixed width for the “Original Link” column (2nd column).
+   Truncates long URLs with ellipsis and keeps them on one line. */
+.linksTable th:nth-child(2),
+.linksTable td:nth-child(2) {
+  width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .linksTable th {
   font-weight: 600;
-}
-
-.linksTable tr:hover {
-  background-color: #f9fbfd;
+  white-space: nowrap;
 }
 
 .linksTable td {
-  font-size: 0.95rem;
-  color: #555;
+  font-size: 0.9rem;
+  color: #555555;
+  vertical-align: middle;
 }
 
+.linksTable tr:hover {
+  background-color: #fafafa;
+}
+
+/* LINK COLORS INSIDE THE TABLE */
+.linksTable a {
+  color: #4c48f3;  /* Change to your preferred link color */
+  text-decoration: none;
+}
+.linksTable a:hover {
+  text-decoration: none;
+}
+
+/* COPY ICON */
 .linksTable .copyBtn {
   background: transparent;
   border: none;
   cursor: pointer;
-}
-
-.linksTable .copyBtn img {
-  width: 16px;
-  height: 16px;
+  padding: 0;
+  margin-left: 0.3rem;
   transition: opacity 0.2s ease;
 }
 
-.linksTable .copyBtn:hover img {
+.linksTable .copyBtn:hover {
   opacity: 0.7;
 }
 
+/* ACTION BUTTONS (EDIT/DELETE) */
 .linksTable .actionBtn {
   background: transparent;
   border: none;
   cursor: pointer;
+  margin-left: 0.5rem;
 }
 
-.linksTable .actionBtn img {
-  width: 18px;
-  height: 18px;
+/* STATUS COLORS */
+.linksTable td .active {
+  color: #52c41a; /* Green for Active */
+  font-weight: 500;
 }
 
 .linksTable td .inactive {
-  color: #d9534f;
+  color: #faad14; /* Gold for Inactive */
+  font-weight: 500;
 }
 
-.linksTable td .active {
-  color: #28a745;
-}
-
-/* Pagination */
+/* PAGINATION */
 .pagination {
   display: flex;
-  justify-content: center;
-  gap: 0.5rem;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.4rem;
   margin: 1.5rem 0;
 }
 
 .pagination button {
   background: #fff;
   border: 1px solid #ddd;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  font-size: 0.95rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  min-width: 34px;
 }
 
 .pagination button:hover {
-  background: #007bff;
+  background: #4c48f3;
   color: #fff;
+  border-color: #4c48f3;
 }
 
 .pagination .activePage {
-  background: #007bff;
+  background: #4c48f3;
   color: #fff;
-  font-weight: bold;
-  border: none;
+  font-weight: 500;
+  border-color: #4c48f3;
 }
 
-/* Toast */
+/* TOAST (e.g., "Link Copied") */
 .toast {
   position: fixed;
   bottom: 20px;
-  right: 20px;
-  background-color: #007bff;
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 0.95rem;
+  left: 20px;
+  background-color: #ffffff;
+  color: #4c48f3;
+  padding: 0.8rem 1.2rem;
+  border: 2px solid #4c48f3;
+  border-radius: 6px;
+  font-size: 0.9rem;
   font-weight: 500;
-  opacity: 0.9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
   z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.3s ease, fadeOut 0.3s ease 3s forwards;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(6px);
   }
   to {
-    opacity: 0.9;
+    opacity: 1;
     transform: translateY(0);
   }
 }
@@ -270,6 +323,89 @@
 @keyframes fadeOut {
   to {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(6px);
   }
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 768px) {
+  .topBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .searchInput {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .contentWrapper {
+    padding: 1rem;
+  }
+
+  .linksTable th:nth-child(2),
+  .linksTable td:nth-child(2) {
+    width: 180px; /* Narrower on tablet/mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    display: none; /* Hide sidebar on very small screens */
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  .topBar {
+    padding: 1rem;
+  }
+
+  .contentWrapper {
+    padding: 1rem;
+  }
+
+  .tableSection {
+    padding: 1rem;
+  }
+
+  .linksTable th,
+  .linksTable td {
+    padding: 0.5rem 0.7rem;
+  }
+
+  /* Make the Original Link column a bit narrower still on mobile */
+  .linksTable th:nth-child(2),
+  .linksTable td:nth-child(2) {
+    width: 150px;
+  }
+
+  .pagination {
+    justify-content: center;
+  }
+}
+
+
+/* Example additions in Links.module.css */
+.profileDropdown {
+  position: absolute;
+  top: 60px; /* adjust to match your layout */
+  right: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.logoutBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  font-size: 14px;
+}
+.logoutBtn:hover {
+  text-decoration: underline;
 }

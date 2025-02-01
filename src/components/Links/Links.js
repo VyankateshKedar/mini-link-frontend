@@ -1,26 +1,61 @@
 // src/components/Links/Links.jsx
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NewLinkModal from "../NewLinkModal/NewLinkModal";
 import EditLinkModal from "../EditLinkModal/EditLinkModal";
 import styles from "./Links.module.css";
-import { FiCopy, FiEdit2, FiTrash2 } from "react-icons/fi";
-import { deleteLink as deleteLinkAPI, fetchLinks, fetchDashboardStats } from "../../utils/api";
+import { FaTachometerAlt, FaLink, FaChartLine, FaCog } from 'react-icons/fa';
+import { FiCopy, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { deleteLink as deleteLinkAPI, fetchLinks } from "../../utils/api";
 import { toast } from "react-toastify";
+import logo from '../assets/images/cuvette_logo.png'; // <-- your logo path
 
 function Links() {
+  const navigate = useNavigate();
+
+  // State for links, pagination, etc.
   const [links, setLinks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Modals
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedLink, setSelectedLink] = useState(null);
 
-  useEffect(() => {
-    fetchLinkData();
-  }, [currentPage, searchTerm]);
+  // User info
+  const [userName, setUserName] = useState("User");
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
+  // Fetch user details from the API
+  const fetchUserDetails = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) throw new Error("No token found");
+
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user details");
+      }
+
+      const data = await response.json();
+      if (data && data.data && data.data.name) {
+        setUserName(data.data.name);
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
+
+  // Fetch links from the API
   const fetchLinkData = async () => {
     try {
       const data = await fetchLinks(currentPage, 10, searchTerm);
@@ -36,20 +71,42 @@ function Links() {
     }
   };
 
+  useEffect(() => {
+    // Fetch user + link data on mount or whenever currentPage/search changes
+    fetchUserDetails();
+    fetchLinkData();
+    // eslint-disable-next-line
+  }, [currentPage, searchTerm]);
+
+  // Handle new link modal
   const handleCreateNew = () => {
     setIsNewModalOpen(true);
   };
-
   const handleCloseNewModal = () => {
     setIsNewModalOpen(false);
   };
-
   const handleLinkCreated = () => {
     fetchLinkData();
     toast.success("Link created successfully!");
     handleCloseNewModal();
   };
 
+  // Handle edit link modal
+  const handleEditLink = (link) => {
+    setSelectedLink(link);
+    setIsEditModalOpen(true);
+  };
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedLink(null);
+  };
+  const handleLinkUpdated = () => {
+    fetchLinkData();
+    toast.success("Link updated successfully!");
+    handleCloseEditModal();
+  };
+
+  // Copy short link
   const handleCopyLink = (shortUrl) => {
     navigator.clipboard
       .writeText(shortUrl)
@@ -59,22 +116,7 @@ function Links() {
       .catch(() => toast.error("Failed to copy link."));
   };
 
-  const handleEditLink = (link) => {
-    setSelectedLink(link);
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setSelectedLink(null);
-  };
-
-  const handleLinkUpdated = () => {
-    fetchLinkData();
-    toast.success("Link updated successfully!");
-    handleCloseEditModal();
-  };
-
+  // Delete link
   const handleDeleteLink = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this link?"
@@ -95,12 +137,14 @@ function Links() {
     }
   };
 
+  // Pagination helpers
   const goToPage = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
   };
 
+  // Format date for table
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString("en-US", {
@@ -112,33 +156,69 @@ function Links() {
     });
   };
 
+  // Toggle the profile dropdown
+  const handleAvatarClick = () => {
+    setShowProfileMenu(!showProfileMenu);
+  };
+
+  // Logout
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  // Derive avatar letters from userName
+  const avatarLetters = userName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+
   return (
     <div className={styles.container}>
-      {/* Sidebar */}
-      <aside className={styles.sidebar}>
-        <div className={styles.logo}>cuvette</div>
-        <ul className={styles.navLinks}>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-          <li className={styles.activeLink}>
-            <Link to="/links">Links</Link>
-          </li>
-          <li>
-            <Link to="/analytics">Analytics</Link>
-          </li>
-          <li>
-            <Link to="/settings">Settings</Link>
-          </li>
-        </ul>
-      </aside>
+     {/* Sidebar */}
+           <aside className={styles.sidebar}>
+           {/* Logo container */}
+           <div className={styles.logo}>
+             {/* Replace text with an <img> element */}
+             <img src={logo} alt="Cuvette Logo" className={styles.logoImage} />
+           </div>
+     
+           <ul className={styles.navLinks}>
+             <li className={styles.activeLink}>
+               <Link to="/">
+                 <FaTachometerAlt className={styles.icon} />
+                 <span>Dashboard</span>
+               </Link>
+             </li>
+             <li>
+               <Link to="/links">
+                 <FaLink className={styles.icon} />
+                 <span>Links</span>
+               </Link>
+             </li>
+             <li>
+               <Link to="/analytics">
+                 <FaChartLine className={styles.icon} />
+                 <span>Analytics</span>
+               </Link>
+             </li>
+             <li>
+               <Link to="/settings">
+                 <FaCog className={styles.icon} />
+                 <span>Settings</span>
+               </Link>
+             </li>
+           </ul>
+         </aside>
 
       {/* Main Content */}
       <main className={styles.mainContent}>
         <div className={styles.contentWrapper}>
+          {/* Top Bar */}
           <header className={styles.topBar}>
             <div className={styles.greetingContainer}>
-              <h2>Good morning, {JSON.parse(localStorage.getItem("user")).name}</h2>
+              <h2>Good morning, {userName}</h2>
               <span className={styles.date}>
                 {new Date().toLocaleDateString("en-US", {
                   weekday: "short",
@@ -163,13 +243,18 @@ function Links() {
                   setSearchTerm(e.target.value);
                 }}
               />
-              <div className={styles.userAvatar}>
-                {JSON.parse(localStorage.getItem("user")).name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .toUpperCase()}
+
+              {/* Avatar + dropdown */}
+              <div className={styles.userAvatar} onClick={handleAvatarClick}>
+                {avatarLetters}
               </div>
+              {showProfileMenu && (
+                <div className={styles.profileDropdown}>
+                  <button onClick={handleLogout} className={styles.logoutBtn}>
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           </header>
         </div>
@@ -252,39 +337,33 @@ function Links() {
           </table>
         </section>
 
-        {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <div className={styles.pagination}>
-            <button
-              onClick={() => goToPage(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from({ length: totalPages }).map((_, i) => {
-              const pageNumber = i + 1;
-              return (
-                <button
-                  key={pageNumber}
-                  onClick={() => goToPage(pageNumber)}
-                  className={
-                    pageNumber === currentPage ? styles.activePage : ""
-                  }
-                >
-                  {pageNumber}
-                </button>
-              );
-            })}
-            <button
-              onClick={() => goToPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              &gt;
-            </button>
-          </div>
-        )}
-
-        {/* Toast Messages are handled globally by react-toastify */}
+        {/* Pagination */}
+        <div className={styles.pagination}>
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            &lt;
+          </button>
+          {Array.from({ length: totalPages }).map((_, i) => {
+            const pageNumber = i + 1;
+            return (
+              <button
+                key={pageNumber}
+                onClick={() => goToPage(pageNumber)}
+                className={pageNumber === currentPage ? styles.activePage : ""}
+              >
+                {pageNumber}
+              </button>
+            );
+          })}
+          <button
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            &gt;
+          </button>
+        </div>
 
         {/* New Link Modal */}
         <NewLinkModal

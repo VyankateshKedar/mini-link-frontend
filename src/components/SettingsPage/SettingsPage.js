@@ -40,7 +40,7 @@ const SettingsPage = () => {
 
   const fetchUser = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/me`, {
         method: "GET",
         headers: {

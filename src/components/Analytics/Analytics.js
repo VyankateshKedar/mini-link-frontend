@@ -1,258 +1,185 @@
-// src/components/Analytics/Analytics.jsx
-
 import React, { useState, useEffect } from "react";
-import Navbar from "../Navbar/Navbar";
-import styles from "./Analytics.module.css"; // Create corresponding CSS module
-import { fetchDashboardStats, fetchLinkAnalytics } from "../../utils/api";
+import { Link } from "react-router-dom";
+import { FaTachometerAlt, FaLink, FaChartLine, FaCog } from 'react-icons/fa';
+import styles from "./Analytics.module.css";
 import { toast } from "react-toastify";
-import EditLinkModal from "../EditLinkModal/EditLinkModal";
+import logo from '../assets/images/cuvette_logo.png'; // <-- your logo path
+
+// Import your API helpers
+import { getAllClicks, fetchCurrentUser } from "../../utils/api";
 
 const Analytics = () => {
-  const [dashboardStats, setDashboardStats] = useState({
-    totalClicks: 0,
-    dateWiseClicks: [],
-    deviceWiseClicks: {},
-    links: [], // Assuming the backend returns a list of links
-  });
-  const [selectedLink, setSelectedLink] = useState(null);
-  const [linkAnalytics, setLinkAnalytics] = useState({
-    totalClicks: 0,
-    deviceSummary: {},
-    browserSummary: {},
-    osSummary: {},
-    clicks: [],
-  });
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  // Store all click rows
+  const [clickData, setClickData] = useState([]);
+  // Store user’s name for “Good morning, …”
+  const [userName, setUserName] = useState("User");
+  // For pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  // Items (clicks) per page
+  const [itemsPerPage] = useState(10);
 
+  // On component load, fetch user + first page of clicks
   useEffect(() => {
-    fetchStats();
+    fetchUserName();
+    fetchPageData(1);
   }, []);
 
-  const fetchStats = async () => {
+  const fetchUserName = async () => {
     try {
-      const data = await fetchDashboardStats();
-      if (data.success) {
-        setDashboardStats(data.data);
-      } else {
-        toast.error(data.message || "Failed to fetch dashboard statistics");
+      const response = await fetchCurrentUser();
+      if (response.success) {
+        setUserName(response.data.name || "User");
       }
     } catch (error) {
-      console.error("Error fetching dashboard stats:", error);
-      toast.error("An error occurred while fetching statistics.");
+      console.error("Failed to fetch user name", error);
     }
   };
 
-  const fetchAnalytics = async (id) => {
+  // Helper to fetch a particular page of click data
+  const fetchPageData = async (pageNumber) => {
     try {
-      const data = await fetchLinkAnalytics(id);
-      if (data.success) {
-        setLinkAnalytics({
-          totalClicks: data.totalClicks,
-          deviceSummary: data.deviceSummary,
-          browserSummary: data.browserSummary,
-          osSummary: data.osSummary,
-          clicks: data.clicks,
-        });
+      const res = await getAllClicks(pageNumber, itemsPerPage);
+      if (res.success) {
+        setClickData(res.data);      // an array of click objects
+        setCurrentPage(res.currentPage);
+        setTotalPages(res.totalPages);
       } else {
-        toast.error(data.message || "Failed to fetch link analytics");
+        toast.error(res.message || "Failed to fetch analytics data.");
       }
     } catch (error) {
-      console.error("Error fetching link analytics:", error);
-      toast.error("An error occurred while fetching link analytics.");
+      console.error("Error fetching analytics:", error);
+      toast.error("An error occurred while fetching analytics.");
     }
   };
 
-  const handleSelectLink = (link) => {
-    setSelectedLink(link);
-    fetchAnalytics(link._id);
+  // Page change
+  const handlePageChange = (pageNumber) => {
+    fetchPageData(pageNumber);
   };
 
-  const handleBack = () => {
-    setSelectedLink(null);
-    setLinkAnalytics({
-      totalClicks: 0,
-      deviceSummary: {},
-      browserSummary: {},
-      osSummary: {},
-      clicks: [],
+  // Format a date/time for display
+  const formatTimestamp = (dateString) => {
+    if (!dateString) return "N/A";
+    const dateObj = new Date(dateString);
+    return dateObj.toLocaleString("en-US", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
-  const handleEditLink = (link) => {
-    setSelectedLink(link);
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setSelectedLink(null);
-  };
-
-  const handleLinkUpdated = () => {
-    fetchStats();
-    toast.success("Link updated successfully!");
-    handleCloseEditModal();
-  };
-
   return (
-    <div className={styles.container}>
-      <Navbar />
-      {!selectedLink ? (
-        <div className={styles.statsContainer}>
-          <h2>Analytics Dashboard</h2>
-          <div className={styles.statsCards}>
-            <div className={styles.card}>
-              <h3>Total Clicks</h3>
-              <p>{dashboardStats.totalClicks}</p>
+    <div className={styles.analyticsPage}>
+      {/* Sidebar */}
+            <aside className={styles.sidebar}>
+            {/* Logo container */}
+            <div className={styles.logo}>
+              {/* Replace text with an <img> element */}
+              <img src={logo} alt="Cuvette Logo" className={styles.logoImage} />
             </div>
-            <div className={styles.card}>
-              <h3>Date-wise Clicks</h3>
-              <ul>
-                {dashboardStats.dateWiseClicks.map((item, index) => (
-                  <li key={index}>
-                    {item.date} - {item.count}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={styles.card}>
-              <h3>Click Devices</h3>
-              <ul>
-                {Object.entries(dashboardStats.deviceWiseClicks).map(
-                  ([device, count], index) => (
-                    <li key={index}>
-                      {device} - {count}
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          </div>
-
-          {/* List of Links to view detailed analytics */}
-          <div className={styles.linksList}>
-            <h3>Your Links</h3>
-            <ul>
-              {dashboardStats.links?.map((link) => (
-                <li key={link._id}>
-                  <span>{link.shortUrl}</span>
-                  <div>
-                    <button onClick={() => handleSelectLink(link)}>
-                      View Analytics
-                    </button>
-                    <button onClick={() => handleEditLink(link)}>
-                      Edit
-                    </button>
-                  </div>
-                </li>
-              ))}
+      
+            <ul className={styles.navLinks}>
+              <li className={styles.activeLink}>
+                <Link to="/">
+                  <FaTachometerAlt className={styles.icon} />
+                  <span>Dashboard</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/links">
+                  <FaLink className={styles.icon} />
+                  <span>Links</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/analytics">
+                  <FaChartLine className={styles.icon} />
+                  <span>Analytics</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="/settings">
+                  <FaCog className={styles.icon} />
+                  <span>Settings</span>
+                </Link>
+              </li>
             </ul>
+          </aside>
+
+      {/* Main content area */}
+      <div className={styles.mainContent}>
+        {/* Top header section */}
+        <div className={styles.headerBar}>
+          <h1>Good morning, {userName}</h1>
+          <p>{/* You can set the current date here if you like, e.g. "Tue, Jan 25" */}</p>
+          <div className={styles.actions}>
+            <button className={styles.createBtn}>+ Create new</button>
+            <input
+              type="text"
+              className={styles.searchBox}
+              placeholder="Search by remarks"
+            />
           </div>
         </div>
-      ) : (
-        <div className={styles.linkAnalyticsContainer}>
-          <button className={styles.backBtn} onClick={handleBack}>
-            Back to Analytics
-          </button>
-          <h2>Analytics for: {selectedLink.shortUrl}</h2>
-          <div className={styles.analyticsSummary}>
-            <div className={styles.card}>
-              <h3>Total Clicks</h3>
-              <p>{linkAnalytics.totalClicks}</p>
-            </div>
-            <div className={styles.card}>
-              <h3>Device Summary</h3>
-              <ul>
-                {Object.entries(linkAnalytics.deviceSummary).map(
-                  ([device, count], index) => (
-                    <li key={index}>
-                      {device} - {count}
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-            <div className={styles.card}>
-              <h3>Browser Summary</h3>
-              <ul>
-                {Object.entries(linkAnalytics.browserSummary).map(
-                  ([browser, count], index) => (
-                    <li key={index}>
-                      {browser} - {count}
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-            <div className={styles.card}>
-              <h3>OS Summary</h3>
-              <ul>
-                {Object.entries(linkAnalytics.osSummary).map(
-                  ([os, count], index) => (
-                    <li key={index}>
-                      {os} - {count}
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          </div>
 
-          {/* Clicks Table */}
-          <div className={styles.clicksTable}>
-            <h3>Click Details</h3>
-            <table>
-              <thead>
+        {/* Table container */}
+        <div className={styles.tableContainer}>
+          <h2 className={styles.tableHeading}>Analytics</h2>
+          <table className={styles.analyticsTable}>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Original Link</th>
+                <th>Short Link</th>
+                <th>ip address</th>
+                <th>User Device</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clickData.length === 0 ? (
                 <tr>
-                  <th>Timestamp</th>
-                  <th>IP Address</th>
-                  <th>Device</th>
-                  <th>Browser</th>
-                  <th>OS</th>
+                  <td colSpan="5" style={{ textAlign: "center" }}>
+                    No clicks found
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {linkAnalytics.clicks.length === 0 && (
-                  <tr>
-                    <td colSpan="5" style={{ textAlign: "center" }}>
-                      No clicks found
-                    </td>
-                  </tr>
-                )}
-                {linkAnalytics.clicks.map((click, index) => (
+              ) : (
+                clickData.map((click, index) => (
                   <tr key={index}>
-                    <td>
-                      {new Date(click.clickedAt).toLocaleString("en-US", {
-                        month: "short",
-                        day: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </td>
+                    <td>{formatTimestamp(click.clickedAt)}</td>
+                    <td>{click.destinationUrl}</td>
+                    <td>{click.shortUrl}</td>
                     <td>{click.ip}</td>
-                    <td>{click.deviceType}</td>
-                    <td>{click.browser}</td>
-                    <td>{click.os}</td>
+                    <td>{click.deviceType || "N/A"}</td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                ))
+              )}
+            </tbody>
+          </table>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className={styles.pagination}>
+              {[...Array(totalPages)].map((_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    className={pageNum === currentPage ? styles.activePage : ""}
+                    onClick={() => handlePageChange(pageNum)}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
-      )}
-
-      {/* Edit Link Modal */}
-      {selectedLink && (
-        <EditLinkModal
-          isOpen={isEditModalOpen}
-          onClose={handleCloseEditModal}
-          link={selectedLink}
-          onLinkUpdated={handleLinkUpdated}
-        />
-      )}
+      </div>
     </div>
-  ); // Closing parenthesis for return statement
-}; // ✅ Added closing brace to end the Analytics function
+  );
+};
 
-export default Analytics; // ✅ Now correctly placed at the top level
+export default Analytics;

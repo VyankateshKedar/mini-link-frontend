@@ -14,7 +14,43 @@ const SignUpForm = () => {
   });
   const navigate = useNavigate();
 
-  // ... rest of the code
+  // Handle input changes for all fields
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Check if the passwords match
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      // Call the registerUser API
+      const response = await registerUser(formData);
+
+      if (response.success) {
+        toast.success("Registration successful");
+        // Redirect to the login page after successful registration
+        navigate("/login");
+      } else {
+        // If the API returns an error message
+        toast.error(response.message || "Registration failed");
+      }
+    } catch (error) {
+      // In case the API call fails
+      toast.error("An error occurred during registration");
+      console.error("Registration error:", error);
+    }
+  };
 
   return (
     <form className="form" onSubmit={handleSubmit}>
@@ -53,7 +89,10 @@ const SignUpForm = () => {
       />
       <button type="submit">Register</button>
       <p>
-        Already have an account? <span onClick={() => navigate("/")}>Login</span>
+        Already have an account?{" "}
+        <span className="clickable" onClick={() => navigate("/")}>
+          Login
+        </span>
       </p>
     </form>
   );

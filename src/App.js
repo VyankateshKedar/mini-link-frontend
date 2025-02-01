@@ -13,13 +13,21 @@ import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   // Function to check if the user is authenticated
- const isAuthenticated = () => !!sessionStorage.getItem("token");
+  const isAuthenticated = () => !!sessionStorage.getItem("token");
   
   return (
     <Router>
       <ToastContainer />
       <Routes>
-        {/* Root Path - AuthPage (Login/Signup) */}
+        {/* Default Route - AuthPage (Login/Signup) */}
+        <Route
+          path="/"
+          element={
+            isAuthenticated() ? <Navigate to="/dashboard" replace /> : <AuthPage />
+          }
+        />
+
+        {/* Login Route (optional) */}
         <Route
           path="/login"
           element={

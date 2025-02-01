@@ -11,13 +11,16 @@ const LoginForm = () => {
   });
   const navigate = useNavigate();
 
+  // Update form state when inputs change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       // 1. Send login request to backend
       const res = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
@@ -29,7 +32,7 @@ const LoginForm = () => {
         }),
       });
 
-      // 2. If the server returns an error status (e.g., 401, 400), handle it
+      // 2. Handle error responses (e.g., 401, 400)
       if (!res.ok) {
         const { message } = await res.json();
         toast.error(message || "Invalid credentials!");
@@ -39,14 +42,13 @@ const LoginForm = () => {
       // 3. Parse the JSON response
       const data = await res.json();
 
-     // 2. Store the token in sessionStorage instead of localStorage
+      // 4. Store the token in sessionStorage
       sessionStorage.setItem("token", data.token);
 
-      // 3. Optionally store user details in sessionStorage as well
+      // 5. Optionally store user details in sessionStorage
       sessionStorage.setItem("user", JSON.stringify(data.user));
 
-
-      // 5. Redirect to dashboard
+      // 6. Redirect to dashboard
       toast.success("Logged in successfully!");
       navigate("/dashboard");
     } catch (err) {
@@ -80,7 +82,10 @@ const LoginForm = () => {
       <button type="submit">Login</button>
 
       <p>
-        Don't have an account? <span onClick={() => navigate("/signup")}>SignUp</span>
+        Don't have an account?{" "}
+        <span onClick={() => navigate("/signup")} className="clickable">
+          SignUp
+        </span>
       </p>
     </form>
   );
