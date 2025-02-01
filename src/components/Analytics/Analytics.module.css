@@ -14,7 +14,6 @@
   flex-shrink: 0;
 }
 
-/* Remove text styling from .logo since we're using an image now */
 .logo {
   margin-bottom: 2.5rem;
   text-align: center;
@@ -191,7 +190,6 @@
   border-color: #007bff !important;
 }
 
-/* Hide old stats container, if you don’t want to remove it from the code entirely */
 .hiddenStats {
   display: none;
 }
@@ -203,4 +201,24 @@
     align-items: flex-start;
     gap: 8px;
   }
+  
+  .analyticsPage {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;         
+    border-bottom: 1px solid #e1e1e1;
+  }
+
+  
+  .sidebar .logo {
+    margin-bottom: 1rem; 
+  }
+  
+  .sidebar {
+    padding: 1rem;
+  }
 }
+
