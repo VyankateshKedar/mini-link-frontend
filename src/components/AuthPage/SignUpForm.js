@@ -1,60 +1,56 @@
 // src/components/AuthPage/SignUpForm.jsx
 import React, { useState } from "react";
-import "./Form.css";
-import { registerUser } from "../../utils/api";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "./Form.css";
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
   const navigate = useNavigate();
 
-  // Handle input changes for all fields
+  // Update form state when inputs change
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
+  // Handle sign-up form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if the passwords match
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
-    }
-
     try {
-      // Call the registerUser API
-      const response = await registerUser(formData);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-      if (response.success) {
-        toast.success("Registration successful");
-        // Redirect to the login page after successful registration
-        navigate("/login");
-      } else {
-        // If the API returns an error message
-        toast.error(response.message || "Registration failed");
+      // Handle non-OK responses
+      if (!res.ok) {
+        const { message } = await res.json();
+        toast.error(message || "Registration failed!");
+        return;
       }
-    } catch (error) {
-      // In case the API call fails
-      toast.error("An error occurred during registration");
-      console.error("Registration error:", error);
+
+      // Parse response data and store token/user details
+      const data = await res.json();
+      sessionStorage.setItem("token", data.token);
+      sessionStorage.setItem("user", JSON.stringify(data.user));
+      toast.success("Registered successfully!");
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Registration Error:", err);
+      toast.error("Something went wrong. Please try again later.");
     }
   };
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <h2>Join us Today!</h2>
+      <h2>Sign Up</h2>
       <input
         type="text"
         name="name"
@@ -66,7 +62,7 @@ const SignUpForm = () => {
       <input
         type="email"
         name="email"
-        placeholder="Email id"
+        placeholder="Email"
         value={formData.email}
         onChange={handleChange}
         required
@@ -79,18 +75,10 @@ const SignUpForm = () => {
         onChange={handleChange}
         required
       />
-      <input
-        type="password"
-        name="confirmPassword"
-        placeholder="Confirm Password"
-        value={formData.confirmPassword}
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Register</button>
+      <button type="submit">Sign Up</button>
       <p>
         Already have an account?{" "}
-        <span className="clickable" onClick={() => navigate("/")}>
+        <span onClick={() => navigate("/login")} className="clickable">
           Login
         </span>
       </p>
