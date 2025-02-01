@@ -35,9 +35,9 @@ function Dashboard() {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/me`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
       });
 
       if (!response.ok) {
