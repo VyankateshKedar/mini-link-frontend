@@ -9,11 +9,11 @@ import "./AuthPage.css";
 const AuthPage = () => {
   const location = useLocation();
 
-  // Set the initial page based on the URL: if the pathname is "/login" use "login", otherwise default to "signup"
+  // Determine initial page based on current URL pathname
   const getInitialPage = () => (location.pathname === "/login" ? "login" : "signup");
   const [page, setPage] = useState(getInitialPage);
 
-  // Update the page state if the location changes.
+  // Update the page state when the location changes
   useEffect(() => {
     setPage(getInitialPage());
   }, [location.pathname]);
