@@ -75,6 +75,14 @@ const SignUpForm = () => {
         onChange={handleChange}
         required
       />
+      <input
+        type="password"
+        name="confirmpassword"
+        placeholder="Confirm Password"
+        value={formData.confirmpassword}
+        onChange={handleChange}
+        required
+      />
       <button type="submit">Sign Up</button>
       <p>
         Already have an account?{" "}
