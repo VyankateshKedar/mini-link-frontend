@@ -14,13 +14,11 @@
   flex-shrink: 0;
 }
 
-/* Remove text styling from .logo since we're using an image now */
 .logo {
   margin-bottom: 2.5rem;
   text-align: center;
 }
 
-/* Style your logo image if needed */
 .logoImage {
   max-width: 100%;
   height: auto;
@@ -170,7 +168,6 @@
   overflow-x: auto;
 }
 
-/* Make sure we can manually control columns */
 .linksTable {
   width: 100%;
   border-collapse: collapse;
